@@ -118,7 +118,7 @@ bool Board::canMoveJIANG(int moveid , int row , int col , int killed)
         2. 移动的步长是一个格子
     */
 
-    if(_s[moveid]._red)
+    if(!_s[moveid]._red)
     {
         if(row > 2)
            return false;
@@ -149,7 +149,7 @@ bool Board::canMoveSHI(int moveid , int row , int col , int killed)
         2. 每次只能斜着走
     */
 
-    if(_s[moveid]._red)
+    if(!_s[moveid]._red)
     {
         if(row > 2)
            return false;
@@ -383,7 +383,6 @@ void Board::click(int clicked,int& row,int& col)
                 _selectid=clicked;
                 update();
             }
-
         }
     }
     else
@@ -421,12 +420,9 @@ void Board::click(QPoint pt)
             break;
         }
     }
-
-
     if(i<32)
     {
          clicked=i;
-
     }
 
     click(clicked , row, col);
@@ -438,7 +434,6 @@ void Board::mouseReleaseEvent(QMouseEvent *ev)
     //将pt转化为象棋的行列值
     //判断这个行列值上面有没有棋子
     click(pt);
-
 }
 
 
