@@ -1,12 +1,13 @@
 #ifndef SINGLEGAME_H
 #define SINGLEGAME_H
 
+#include "board.h"
 
-class SingleGame
+class SingleGame : public Board  //SingleGame从Board中派生出来
 {
 public:
-    SingleGame();
-    ~SingleGame();
+    //SingleGame();
+    //~SingleGame();
 };
 
 #endif // SINGLEGAME_H

@@ -38,6 +38,9 @@ public:
     int getStoneId(int rEye,int cEye);
     int getStoneCountAtLine(int row1,int col1,int row2,int col2);
     bool isBottomSide(int moveid);//moveid这个棋子是上面阵营的，还是下面阵营的
+
+    void click(int clicked,int& row,int& col);
+    void click(QPoint pt);
     ~Board();
 
 signals:

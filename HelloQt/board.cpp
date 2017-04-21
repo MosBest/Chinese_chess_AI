@@ -372,33 +372,8 @@ bool Board::canMove(int moveid, int row, int col, int killed)
     return true;
 }
 
-void Board::mouseReleaseEvent(QMouseEvent *ev)
+void Board::click(int clicked,int& row,int& col)
 {
-    QPoint pt=ev->pos();//用于得到鼠标点击的位置
-    //将pt转化为象棋的行列值
-    //判断这个行列值上面有没有棋子
-    int row,col;
-    bool bRet=getRowCol(pt,row,col);
-    if(bRet==false)//表明鼠标点到了棋盘外面了
-        return;
-    int clicked=-1;
-
-    int i;
-    for(i=0;i<32;i++)
-    {
-        if(_s[i]._col==col && _s[i]._row==row && _s[i]._dead==false)
-        {
-            break;
-        }
-    }
-
-
-    if(i<32)
-    {
-         clicked=i;
-        // update();
-    }
-
     if(_selectid==-1)
     {
         if(clicked!=-1)
@@ -428,6 +403,41 @@ void Board::mouseReleaseEvent(QMouseEvent *ev)
         }
 
     }
+}
+
+void Board::click(QPoint pt)
+{
+    int row,col;
+    bool bRet=getRowCol(pt,row,col);
+    if(bRet==false)//表明鼠标点到了棋盘外面了
+        return;
+    int clicked=-1;
+
+    int i;
+    for(i=0;i<32;i++)
+    {
+        if(_s[i]._col==col && _s[i]._row==row && _s[i]._dead==false)
+        {
+            break;
+        }
+    }
+
+
+    if(i<32)
+    {
+         clicked=i;
+
+    }
+
+    click(clicked , row, col);
+}
+
+void Board::mouseReleaseEvent(QMouseEvent *ev)
+{
+    QPoint pt=ev->pos();//用于得到鼠标点击的位置
+    //将pt转化为象棋的行列值
+    //判断这个行列值上面有没有棋子
+    click(pt);
 
 }
 
