@@ -57,6 +57,9 @@ int getMaxScore(int level);
 二者互相递归调用对方。
 自己定义层数level，每递归依次level--.直到level==0，退出递归。该方法运算量太大，导致level=4时，就无法计算了。
 
+# 第五次修改：
+增加“网络对战”功能
+
 
   [1]: https://github.com/MosBest/Chinese_chess_AI/blob/master/picture/1.png
   [2]: ./images/1.png "1.png"

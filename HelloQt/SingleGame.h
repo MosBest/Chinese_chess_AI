@@ -7,9 +7,11 @@ class SingleGame : public Board  //SingleGame从Board中派生出来
 {
     Q_OBJECT
 public:
+
     SingleGame()
     {
-        _level=4;
+        _level=3;
+        _isSingle=true;
     }
 
     //~SingleGame();
@@ -30,6 +32,7 @@ public:
     int getMaxScore(int level);
 
     int _level;
+
 public slots:
     void computerMove();
 };

@@ -18,7 +18,7 @@ public:
     bool _red;//棋子的颜色 为true表示红色 ，为false表示黑色
     TYPE _type;//棋子的类型
 
-    void init(int id)
+     void init(int id ,char c)
     {
         //在函数里定义一个结果体
         struct{
@@ -49,7 +49,11 @@ public:
 
         _id=id;
         _dead=false;
-        _red= id>=16;
+
+        if(c==0)
+            _red= id>=16;
+        else
+            _red= id<16;
 
         if(id<16)
         {
@@ -64,8 +68,6 @@ public:
             _type=pos[id-16].type;
 
         }
-
-
     }
 
     QString getText()//是函数

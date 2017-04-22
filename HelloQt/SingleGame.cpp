@@ -5,7 +5,7 @@ void SingleGame::click(int clicked,int& row,int& col)//SingleGame重载click函�
 {
     if(!this->_bRedTurn)
         return;  //如果是黑棋子，人点了也没用
-
+    _redSide=true;
     Board::click(clicked,row,col);
 
     if(!this->_bRedTurn)

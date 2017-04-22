@@ -6,8 +6,9 @@ Board::Board(QWidget *parent) : QWidget(parent)
 {
     for(int i=0;i<32;i++)
     {
-        _s[i].init(i);
+        _s[i].init(i,0);
     }
+    bool _isSingle=false;
 
     _selectid=-1;
     _bRedTurn=true;//一开始红棋走
@@ -118,7 +119,7 @@ bool Board::canMoveJIANG(int moveid , int row , int col , int killed)
         2. 移动的步长是一个格子
     */
 
-    if(!_s[moveid]._red)
+    if(_s[moveid]._red !=_redSide)
     {
         if(row > 2)
            return false;
@@ -149,7 +150,7 @@ bool Board::canMoveSHI(int moveid , int row , int col , int killed)
         2. 每次只能斜着走
     */
 
-    if(!_s[moveid]._red)
+    if(_s[moveid]._red !=_redSide)
     {
         if(row > 2)
            return false;
@@ -190,7 +191,7 @@ int Board::getStoneId(int rEye,int cEye)//在(rEye,cEye)点如果有棋子，就
 bool Board::isBottomSide(int moveid)//moveid这个棋子是上面阵营的，还是下面阵营的
 {
 
-    if(_s[moveid]._red)
+    if(_s[moveid]._red == _redSide)
         return true;
     return false;
 }
@@ -290,8 +291,11 @@ bool Board::canMoveCHE(int moveid , int row , int col , int killed)
 bool Board::canMovePAO(int moveid , int row , int col , int killed)
 {
     int ret=getStoneCountAtLine(_s[moveid]._row,_s[moveid]._col,row,col);//得到两个点之间的有几个棋子
-    if(killed!=-1)
+    if((_s[moveid]._red ==_redSide && killed!=-1)|| (_s[moveid]._red !=_redSide && killed>=-16 ))
     {
+        if(_isSingle==true && killed==-1 )
+            return false;
+
         if(ret==1)
             return true;
     }
@@ -334,12 +338,19 @@ bool Board::canMoveBING(int moveid , int row , int col , int killed)
 
 bool Board::canMove(int moveid, int row, int col, int killed)
 {
-    if(_s[moveid]._red==_s[killed]._red && killed!=-1)//killed和moveid是同一方
+    if((_s[moveid]._red ==_redSide && _s[moveid]._red==_s[killed]._red && killed!=-1))//killed和moveid是同一方
     {
         //换选择
         _selectid=killed;
         update();
 
+
+        return false;
+    }else if(_s[moveid]._red !=_redSide && _s[moveid]._red==_s[killed]._red && killed>=0)
+    {
+        //换选择
+        _selectid=killed;
+        update();
         return false;
     }
 
@@ -392,9 +403,13 @@ void Board::click(int clicked,int& row,int& col)
             //走棋或者吃棋
             _s[_selectid]._row=row;
             _s[_selectid]._col=col;
-            if(clicked!=-1)
+            if(_s[_selectid]._red ==_redSide &&clicked!=-1)
             {
                 _s[clicked]._dead=true;
+            }
+            else if(_s[_selectid]._red !=_redSide && clicked>=-16)
+            {
+                _s[clicked+32]._dead=true;
             }
             _selectid=-1;
             _bRedTurn=!_bRedTurn;

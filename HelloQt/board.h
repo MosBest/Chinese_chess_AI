@@ -16,7 +16,8 @@ public:
     int _r;//棋子的半径
     int _selectid;
     bool _bRedTurn;
-
+    bool _redSide;
+    bool _isSingle;
     QPoint center(int row , int col);//返回象棋棋盘行列对应的像素坐标
     QPoint center(int id);//函数重载
     void paintEvent(QPaintEvent *);//画图事件
