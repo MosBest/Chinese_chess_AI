@@ -5,8 +5,13 @@
 
 class SingleGame : public Board  //SingleGame从Board中派生出来
 {
+    Q_OBJECT
 public:
-    //SingleGame();
+    SingleGame()
+    {
+        _level=4;
+    }
+
     //~SingleGame();
     virtual void click(int clicked,int& row,int& col);//SingleGame重载click函数
 
@@ -21,8 +26,12 @@ public:
     void moveStone(int moveid,int rowTo,int colTo);
     void reliveStone(int killid);
 
-    int getMinScore();
+    int getMinScore(int level);
+    int getMaxScore(int level);
 
+    int _level;
+public slots:
+    void computerMove();
 };
 
 #endif // SINGLEGAME_H

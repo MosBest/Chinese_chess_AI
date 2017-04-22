@@ -1,4 +1,5 @@
 #include "SingleGame.h"
+#include <QTimer>
 
 void SingleGame::click(int clicked,int& row,int& col)//SingleGame重载click函数
 {
@@ -9,12 +10,20 @@ void SingleGame::click(int clicked,int& row,int& col)//SingleGame重载click函�
 
     if(!this->_bRedTurn)
     {
-        Step* step=getBestMove();
 
-        killStone(step->_killid);
-        moveStone(step->_moveid,step->_rowTo,step->_colTo);
-        delete step;
+        //启动0.1秒定时器，在0.1秒期间让红棋刷新完，之后电脑思考。
+        QTimer::singleShot(100,this,SLOT(computerMove()));
     }
+}
+
+void SingleGame::computerMove()
+{
+    Step* step=getBestMove();
+
+    killStone(step->_killid);
+    moveStone(step->_moveid,step->_rowTo,step->_colTo);
+    delete step;
+    update();
 }
 
 void SingleGame::saveStep(int moveid,int killid, int row,int col, QVector<Step *> &steps)
@@ -124,8 +133,39 @@ int SingleGame::calcScore()
 
 }
 
-int SingleGame::getMinScore()
+int SingleGame::getMaxScore(int level)
 {
+    if(level==0)
+        return calcScore();
+
+    //1. 看看有哪些步骤可以走
+    QVector<Step*> steps;
+    getAllPossibleMove(steps);//红棋的所有可能的走法
+    int maxScore=-1000000;
+    while(steps.count())
+    {
+        Step* step=steps.back();
+        steps.removeLast();
+
+        fackMove(step);//尝试走一步
+        int score=getMinScore(level-1);//再假象人走一步后导致的最小局面分
+        unfackMove(step);//从那一步回来
+
+        if(score>maxScore)
+        {
+            maxScore=score;
+        }
+        delete step;
+    }
+
+    return maxScore;
+
+}
+
+int SingleGame::getMinScore(int level)
+{
+    if(level==0)
+        return calcScore();
     //1. 看看有哪些步骤可以走
     QVector<Step*> steps;
     getAllPossibleMove(steps);//红棋的所有可能的走法
@@ -136,7 +176,7 @@ int SingleGame::getMinScore()
         steps.removeLast();
 
         fackMove(step);//尝试走一步
-        int score=calcScore();//再假象人走一步后导致的最小局面分
+        int score=getMaxScore(level-1);//再假象人走一步后导致的最小局面分
         unfackMove(step);//从那一步回来
 
         if(score<minScore)
@@ -166,7 +206,7 @@ Step* SingleGame::getBestMove()
         steps.removeLast();
 
         fackMove(step);//尝试走一步
-        int score=getMinScore();//再假象人走一步后导致的最小局面分
+        int score=getMinScore(_level-1);//再假象人走一步后导致的最小局面分
         unfackMove(step);//从那一步回来
 
         if(score>maxScore)
