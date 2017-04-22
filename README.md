@@ -44,6 +44,6 @@ return ret;
 ![enter description here][3]
 
 
-  [1]: ./images/1492822954346.jpg "1492822954346.jpg"
-  [2]: ./images/1492822974765.jpg "1492822974765.jpg"
-  [3]: ./images/1492822991205.jpg "1492822991205.jpg"
+  [1]: ./images/1.png "1.png"
+  [2]: ./images/2.png "2.png"
+  [3]: ./images/3.png "3.png"
