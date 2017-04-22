@@ -44,6 +44,6 @@ return ret;
 ![enter description here][3]
 
 
-  [1]: ./images/1.png "1.png"
-  [2]: ./images/2.png "2.png"
-  [3]: ./images/3.png "3.png"
+  [1]: https://github.com/MosBest/Chinese_chess_AI/blob/master/picture/1.png
+  [2]: https://github.com/MosBest/Chinese_chess_AI/blob/master/picture/2.png
+  [3]: https://github.com/MosBest/Chinese_chess_AI/blob/master/picture/3.png
