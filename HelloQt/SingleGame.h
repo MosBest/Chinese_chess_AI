@@ -20,6 +20,9 @@ public:
     void killStone(int killid);
     void moveStone(int moveid,int rowTo,int colTo);
     void reliveStone(int killid);
+
+    int getMinScore();
+
 };
 
 #endif // SINGLEGAME_H

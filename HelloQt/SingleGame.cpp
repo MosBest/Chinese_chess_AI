@@ -13,6 +13,7 @@ void SingleGame::click(int clicked,int& row,int& col)//SingleGame重载click函�
 
         killStone(step->_killid);
         moveStone(step->_moveid,step->_rowTo,step->_colTo);
+        delete step;
     }
 }
 
@@ -34,7 +35,13 @@ void SingleGame::saveStep(int moveid,int killid, int row,int col, QVector<Step *
 
 void SingleGame::getAllPossibleMove(QVector<Step *> &steps)
 {
-    for(int i=0;i<16;i++)//0~15是黑色棋子
+    int min=0,max=16;
+    if(this->_bRedTurn)//如果是红棋走
+    {
+        min=16;
+        max=32;
+    }
+    for(int i=min;i<max;i++)//0~15是黑色棋子 , 16~32是红色棋子
     {
         if(_s[i]._dead)
             continue;
@@ -117,29 +124,62 @@ int SingleGame::calcScore()
 
 }
 
+int SingleGame::getMinScore()
+{
+    //1. 看看有哪些步骤可以走
+    QVector<Step*> steps;
+    getAllPossibleMove(steps);//红棋的所有可能的走法
+    int minScore=1000000;
+    while(steps.count())
+    {
+        Step* step=steps.back();
+        steps.removeLast();
+
+        fackMove(step);//尝试走一步
+        int score=calcScore();//再假象人走一步后导致的最小局面分
+        unfackMove(step);//从那一步回来
+
+        if(score<minScore)
+        {
+            minScore=score;
+        }
+        delete step;
+    }
+
+    return minScore;
+
+}
+
 Step* SingleGame::getBestMove()
 {
     //1. 看看有哪些步骤可以走
     QVector<Step*> steps;
     getAllPossibleMove(steps);
-    int l=steps.length();
+
     //2.每一种可能尝试地走一下
     //3. 并且记住每一种可能的得分
     int maxScore=-100000;
-    Step* ret;
-    for(QVector<Step*>::iterator it=steps.begin();it!=steps.end();++it)
+    Step* ret=NULL;
+    while(steps.count())
     {
-        Step* step=*it;
+        Step* step=steps.back();
+        steps.removeLast();
+
         fackMove(step);//尝试走一步
-        int score=calcScore();//计算这一步的分数
+        int score=getMinScore();//再假象人走一步后导致的最小局面分
         unfackMove(step);//从那一步回来
 
         if(score>maxScore)
         {
             maxScore=score;
+            if(ret)
+                delete ret;
             ret=step;
         }
-
+        else
+        {
+            delete step;
+        }
     }
 
     //4. 取最好的结果作为参考
